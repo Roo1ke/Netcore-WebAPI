@@ -1,17 +1,16 @@
 <template>
 <body id="poster">
-  <el-form class="login-container" label-position="left" label-width="0px">
+  <el-form class="login-container" label-position="left" label-width="0px" ref="loginform" :model="loginForm">
     <h3 class="login_title">系统登录</h3>
-    <el-form-item>
+    <el-form-item prop="username" :rules="[{ required: true, message: '账号不能为空'}]">
       <el-input type="text" v-model="loginForm.username" auto-complete="off" placeholder="账号"></el-input>
     </el-form-item>
-
-    <el-form-item>
+    <el-form-item prop="password" :rules="[{ required: true, message: '密码不能为空'}]">
       <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码"></el-input>
     </el-form-item>
 
     <el-form-item style="width: 100%">
-      <el-button type="primary" style="width: 100%;background: #505458;border: none" v-on:click="login">登录</el-button>
+      <el-button type="primary" style="width: 100%;background: #505458;border: none" v-on:click="login" :loading="loading">登录</el-button>
     </el-form-item>
   </el-form>
 </body>
@@ -26,24 +25,36 @@ export default {
         username: '',
         password: ''
       },
-      responseResult: []
+      loading: false
     }
   },
   methods: {
     login() {
-      // this.$axios
-      //   .post('/login', {
-      //     username: this.loginForm.username,
-      //     password: this.loginForm.password
-      //   })
-      //   .then(successResponse => {
-      //     if (successResponse.data.code === 200) {
-      this.$router.replace({
-        path: '/index'
-      })
-      //     }
-      //   })
-      //   .catch(failResponse => {})
+      this.$refs.loginform.validate((valid) => {
+        if (valid) {
+          this.loading = true;
+          this.$axios.post('/api/account/login', {
+            account: this.loginForm.username,
+            pwd: this.loginForm.password
+          }, res => {
+            this.loading = false;
+            if (res.data.code == 1) {
+              //登录成功
+              var userinfo = res.data.data;
+              this.$store.state.userinfo = userinfo;
+              window.sessionStorage.setItem("userinfo", JSON.stringify(userinfo));
+              this.$router.replace({
+                path: '/'
+              })
+            } else {
+              this.$message.error(res.data.msg);
+            }
+            // if (successResponse.data.code === 200) {
+
+            // }
+          })
+        }
+      });
     }
   }
 }
@@ -62,6 +73,12 @@ export default {
 body {
   margin: 0px;
   padding: 0;
+}
+
+.errmsg {
+  color: #f56c6c;
+  display: block;
+  text-align: center;
 }
 
 .login-container {

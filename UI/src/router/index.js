@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import UserManage from '@/components/UserManage'
-import Index from '@/components/Index'
+import Index from '@/components/Layout/Index'
 Vue.use(Router)
 
 export default new Router({
@@ -18,17 +18,19 @@ export default new Router({
     {
       path: '/',
       name: 'Index',
-      component: Index
+      component: Index,
+      children:[
+        {
+          path: '/HelloWorld',
+          name: 'HelloWorld',
+          component: HelloWorld
+        },
+        {
+          path: '/UserManage',
+          name: 'UserManage',
+          component: UserManage
+        }
+      ]
     },
-    {
-      path: '/HelloWorld',
-      name: 'HelloWorld',
-      component: HelloWorld
-    },
-    {
-      path: '/UserManage',
-      name: 'UserManage',
-      component: UserManage
-    }
   ]
 })
