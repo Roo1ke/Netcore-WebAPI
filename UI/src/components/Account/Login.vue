@@ -68,6 +68,8 @@ export default {
   width: 100%;
   /*background-size: cover;*/
   position: fixed;
+      display: flex;
+    align-items: center;
 }
 
 body {

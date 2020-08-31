@@ -32,7 +32,6 @@ export default {
   }
 }
 </script>
-
 <style>
 .sys-title {
   color: rgb(191, 203, 217);
