@@ -1,19 +1,21 @@
 <template>
 <div id="warper">
   <el-aside class="aside">
-    <div class="sys-title"><span v-if="isopen">健康助手</span>
+    <div class="sys-title"><span v-if="isopen">
+        <router-link to="/"><span>健康助手</span></router-link>
+      </span>
     </div>
-    <el-menu efault-active="2" class="el-menu-vertical-demo" :collapse="!isopen" :collapse-transition="false">
+    <el-menu :default-active="activeIndex" class="el-menu-vertical-demo" :collapse="!isopen" :collapse-transition="false">
       <el-submenu index="1">
         <template slot="title">
           <i class="el-icon-setting"></i>
           <span>系统设置</span>
         </template>
-        <el-menu-item index="1-1">
+        <el-menu-item index="/UserManage">
           <router-link to="/UserManage"><span>用户管理</span></router-link>
         </el-menu-item>
-        <el-menu-item index="1-2">
-          <router-link to="/HelloWorld"><span>用户管理</span></router-link>
+        <el-menu-item index="/HelloWorld">
+          <router-link to="/HelloWorld"><span>HelloWorld</span></router-link>
         </el-menu-item>
       </el-submenu>
     </el-menu>
@@ -29,10 +31,29 @@ export default {
     return {
 
     }
-  }
+  },
+  computed: {
+    activeIndex: {
+      get() {
+        return this.$store.state.activeIndex;
+      },
+      set(val) {
+        this.$store.commit('set_active_index', val);
+      }
+    }
+  },
 }
 </script>
+
 <style>
+a {
+  color: rgb(191, 203, 217)
+}
+
+a:hover {
+  color: rgb(191, 203, 217)
+}
+
 .sys-title {
   color: rgb(191, 203, 217);
   text-align: center;

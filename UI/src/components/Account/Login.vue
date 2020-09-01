@@ -56,6 +56,17 @@ export default {
         }
       });
     }
+  },
+  created() {
+    //回车键直接登录
+    let that = this;
+    document.onkeypress = function (e) {
+      var keycode = document.all ? event.keyCode : e.which;
+      //需要注意的：that.$route.path==''/login'的作用是如果不判断，回车可能所有页面都生效，也就是无论在哪个页面敲回车都会直接登录
+      if (that.$route.path == '/Login' && keycode == 13) {
+        that.login();
+      }
+    };
   }
 }
 </script>
@@ -68,8 +79,8 @@ export default {
   width: 100%;
   /*background-size: cover;*/
   position: fixed;
-      display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 body {
