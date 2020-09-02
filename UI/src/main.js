@@ -7,8 +7,9 @@ import 'element-ui/lib/theme-chalk/index.css';
 import router from './router'
 import axios from './index.js';
 import store from './store/index.js'
+import Global from './utils/global.js'
 Vue.prototype.$axios = axios;
-
+Vue.prototype.Global=Global;
 Vue.config.productionTip = false
 Vue.use(ElementUI);
 

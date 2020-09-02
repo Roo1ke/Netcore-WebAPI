@@ -5,7 +5,7 @@
     <i class="el-icon-s-unfold closeicon" v-if="!isopen" @click="tooglemenu"></i>
     <div style="flex:1"></div>
     <div style="flex:0 0 100px" class="vertical-middle">
-      <el-avatar shape="square" :size="40" :src="squareUrl"></el-avatar>
+      <el-avatar :size="40" :src="Global.baseurl+(userinfo.headerImgUrl==null?Global.defaultheader:userinfo.headerImgUrl)"></el-avatar>
       <i class="el-icon-caret-bottom" id="toggleAvatar" style="margin-left:8px" @click="toggleAvatar"></i>
     </div>
   </el-header>
@@ -22,7 +22,7 @@
         <div class="transition-box">
           <router-link to="/"><span>首页</span></router-link>
         </div>
-        <div class="transition-box">退出登录</div>
+        <div class="transition-box" @click="signout()">退出登录</div>
       </div>
     </el-collapse-transition>
   </div>
@@ -80,7 +80,11 @@ export default {
       set(val) {
         this.$store.commit('set_active_index', val);
       }
-    }
+    },
+    userinfo() {
+      console.log(this.$store.state.userinfo)
+      return this.$store.state.userinfo;
+    },
   },
   methods: {
     tooglemenu() {
@@ -124,6 +128,12 @@ export default {
           });
         }
       }
+    },
+    signout() {
+      window.sessionStorage.clear();
+      this.$router.push({
+        path: '/login'
+      });
     }
   },
   directives: {
