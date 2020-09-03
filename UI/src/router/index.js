@@ -4,6 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import UserManage from '@/components/UserManage'
 import Index from '@/components/Layout/Index'
 import Profile from '@/components/Account/Profile'
+import Menu from '@/components/System/Menu'
 Vue.use(Router)
 
 export default new Router({
@@ -35,7 +36,12 @@ export default new Router({
           path: '/Profile',
           name: '个人中心',
           component: Profile
-        }
+        },
+        {
+          path: '/Menu',
+          name: '菜单管理',
+          component: Menu
+        },
       ]
     },
   ]

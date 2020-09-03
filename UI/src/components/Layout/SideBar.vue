@@ -14,6 +14,9 @@
         <el-menu-item index="/UserManage">
           <router-link to="/UserManage"><span>用户管理</span></router-link>
         </el-menu-item>
+        <el-menu-item index="/Menu">
+          <router-link to="/Menu"><span>菜单管理</span></router-link>
+        </el-menu-item>
         <el-menu-item index="/HelloWorld">
           <router-link to="/HelloWorld"><span>HelloWorld</span></router-link>
         </el-menu-item>
