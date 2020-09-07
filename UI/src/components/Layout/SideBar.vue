@@ -6,19 +6,22 @@
       </span>
     </div>
     <el-menu :default-active="activeIndex" class="el-menu-vertical-demo" :collapse="!isopen" :collapse-transition="false">
-      <el-submenu index="1">
+      <el-menu-item index="0">
+        <i class="el-icon-s-home"></i>
+        <span slot="title">首页</span>
+      </el-menu-item>
+      <el-submenu :index="item.label" v-for="(item,index) in usermenu" :key="index">
         <template slot="title">
-          <i class="el-icon-setting"></i>
-          <span>系统设置</span>
+          <i :class="[item.icon]"></i>
+          <span>{{item.label}}</span>
         </template>
-        <el-menu-item index="/UserManage">
-          <router-link to="/UserManage"><span>用户管理</span></router-link>
-        </el-menu-item>
-        <el-menu-item index="/Menu">
-          <router-link to="/Menu"><span>菜单管理</span></router-link>
-        </el-menu-item>
-        <el-menu-item index="/HelloWorld">
-          <router-link to="/HelloWorld"><span>HelloWorld</span></router-link>
+        <el-menu-item :index="sub.path" v-for="(sub,sub_index) in item.children" :key="sub_index">
+          <router-link :to="sub.path" v-if="sub.path!=null">
+            <i :class="[sub.icon]"></i>
+            <span>{{sub.label}}</span>
+          </router-link>
+          <i :class="[sub.icon]" v-if="sub.path==null"></i>
+          <span v-if="sub.path==null">{{sub.label}}</span>
         </el-menu-item>
       </el-submenu>
     </el-menu>
@@ -32,7 +35,7 @@ export default {
   props: ['isopen'],
   data() {
     return {
-
+      usermenu: []
     }
   },
   computed: {
@@ -44,6 +47,9 @@ export default {
         this.$store.commit('set_active_index', val);
       }
     }
+  },
+  mounted() {
+    this.usermenu = this.$store.state.userinfo.menus
   },
 }
 </script>
@@ -86,6 +92,7 @@ a:hover {
   -webkit-transition: width .28s;
   transition: width .28s;
   height: 100%;
+  width: 210px !important;
 }
 
 .el-menu {
@@ -93,8 +100,12 @@ a:hover {
   background-color: rgb(48, 65, 86);
 }
 
-.el-menu-item {
+.el-submenu .el-menu-item {
   background: #1f2d3d;
+
+}
+
+.el-menu-item {
   color: rgb(191, 203, 217)
 }
 

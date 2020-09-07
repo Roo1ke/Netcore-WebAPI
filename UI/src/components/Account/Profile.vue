@@ -57,10 +57,11 @@ export default {
             if (!value) {
               return callback(new Error('手机号码不能为空'));
             }
-            this.$axios.post('/api/Systemuser/CheckMobilePhone', {
+            var obj = {
               PKID: this.user.pkid,
-              mobilephone: this.form.mobilePhone
-            }, res => {
+              values: this.form.mobilePhone
+            }
+            this.$axios.post('/api/Systemuser/CheckMobilePhone', obj, res => {
               if (res.data) {
                 callback(new Error('该手机号码已存在'))
               } else {

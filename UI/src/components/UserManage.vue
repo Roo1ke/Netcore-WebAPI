@@ -37,11 +37,19 @@
   </div>
   <!--表单-->
   <el-dialog :title="title" :visible.sync="dialogFormVisible">
-    <el-form :model="form" ref="dengmiQueryForm" label-width="100px" size="mini">
+    <el-form :model="form" ref="dengmiQueryForm" label-width="100px" size="mini" :rule="rules">
       <el-row>
         <el-col :span="12">
-          <el-form-item label="用户名(登录使用)">
+          <el-form-item label="用户名">
             <el-input v-model="form.loginName" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="用户角色">
+            <el-select v-model="form.roles" multiple placeholder="请选择用户角色">
+              <el-option v-for="item in rolesList" :key="item.pkid" :label="item.roleName" :value="item.pkid">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -49,8 +57,6 @@
             <el-input v-model="form.userName" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
         <el-col :span="12">
           <el-form-item label="手机号">
             <el-input v-model="form.mobilePhone" autocomplete="off"></el-input>
@@ -79,7 +85,53 @@ export default {
       tableData: [],
       totalcount: 0,
       currPageIndex: 1,
-      currPageSize: 10
+      currPageSize: 10,
+      rolesList: [],
+      rules: {
+        mobilePhone: [{
+          validator: (rule, value, callback) => {
+            if (!value) {
+              return callback(new Error('手机号码不能为空'));
+            }
+            var obj = {
+              PKID: this.user.pkid,
+              values: this.form.mobilePhone
+            }
+            this.$axios.post('/api/Systemuser/CheckMobilePhone', obj, res => {
+              if (res.data) {
+                callback(new Error('该手机号码已存在'))
+              } else {
+                callback();
+              }
+            })
+          },
+          trigger: 'blur'
+        }],
+        loginName: [{
+          validator: (rule, value, callback) => {
+            if (!value) {
+              return callback(new Error('登录名不能为空'));
+            }
+            var obj = {
+              PKID: this.user.pkid,
+              values: this.form.mobilePhone
+            }
+            this.$axios.post('/api/Systemuser/CheckLoginName', obj, res => {
+              if (res.data) {
+                callback(new Error('该登录名已存在'))
+              } else {
+                callback();
+              }
+            })
+          },
+          trigger: 'blur'
+        }],
+        userName: [{
+          required: true,
+          message: '姓名不能为空',
+          trigger: 'blur'
+        }]
+      },
     }
   },
   methods: {
@@ -103,9 +155,17 @@ export default {
     add() {
       this.dialogFormVisible = true
       this.title = '新增账户'
+      this.form = {}
     },
     //打开编辑弹窗
-    editevent(item) {},
+    editevent(item) {
+      this.dialogFormVisible = true
+      this.title = '编辑账户'
+      this.form = JSON.parse(JSON.stringify(item))
+      if (this.form.roles.length > 0) {
+        this.form.roles = this.form.roles.split(',').map(Number);
+      }
+    },
     //删除数据
     deleteevent(item) {
       this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
@@ -120,14 +180,32 @@ export default {
     },
     //提交表单
     submit() {
-      this.$axios.post("/api/SystemUser", this.form, res => {
-        console.log(res)
+      this.$refs.dengmiQueryForm.validate((valid) => {
+        if (valid) {
+          if (this.form.roles.length > 0) {
+            this.form.roles = this.form.roles.join(',')
+          }
+          this.$axios.post("/api/SystemUser", this.form, res => {
+            if (res.data.code == 1) {
+              this.$message.success(res.data.msg);
+              this.dialogFormVisible = false;
+              this.search();
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+        }
       })
-
+    },
+    initRoles() {
+      this.$axios.get("/api/sysroles/getallroles", {}, res => {
+        this.rolesList = res.data;
+      })
     }
   },
   created() {
     this.search();
+    this.initRoles();
   }
 }
 </script>

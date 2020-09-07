@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import jwtDecode from 'jwt-decode'
 export default {
   name: "Login",
   data() {
@@ -39,8 +40,11 @@ export default {
           }, res => {
             this.loading = false;
             if (res.data.code == 1) {
-              //登录成功
               var userinfo = res.data.data;
+              //登录成功
+              const decode = jwtDecode(userinfo);
+              console.log(decode);
+              return;
               this.$store.state.userinfo = userinfo;
               window.sessionStorage.setItem("userinfo", JSON.stringify(userinfo));
               this.$router.replace({

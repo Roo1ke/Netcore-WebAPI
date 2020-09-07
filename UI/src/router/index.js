@@ -5,6 +5,8 @@ import UserManage from '@/components/UserManage'
 import Index from '@/components/Layout/Index'
 import Profile from '@/components/Account/Profile'
 import Menu from '@/components/System/Menu'
+import Role from '@/components/System/Role'
+import NoAuth from '@/components/Error/NoAuth'
 Vue.use(Router)
 
 export default new Router({
@@ -41,6 +43,16 @@ export default new Router({
           path: '/Menu',
           name: '菜单管理',
           component: Menu
+        },
+        {
+          path: '/Role',
+          name: '角色管理',
+          component: Role
+        },
+        {
+          path: '/Error/401',
+          name: '401',
+          component: NoAuth
         },
       ]
     },

@@ -5,17 +5,40 @@ let http = axios.create({
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json'
-  },
-  // transformRequest: [function (data) {
-  //   let newData = '';
-  //   for (let k in data) {
-  //     if (data.hasOwnProperty(k) === true) {
-  //       newData += encodeURIComponent(k) + '=' + encodeURIComponent(data[k]) + '&';
-  //     }
-  //   }
-  //   return newData;
-  // }]
+  }
 });
+
+// //请求开始拦截
+// http.interceptors.request.use(conf => {
+//   //请求带token
+//       conf.headers['Authorization'] = store2('accesstoken')
+//       return conf
+//   },
+//   error => ({ status: 0, msg: error.message })
+// )
+// //请求返回拦截
+// http.interceptors.response.use(response => {
+//       return Promise.resolve(response).then(checkCode)
+//   },
+//   error => {
+//       checkStatus(error.response)
+//       return Promise.reject(error)
+//   }
+// )
+// // http状态码错误处理
+// const checkStatus = (res) => {
+//   window.$pig.$vux.loading.hide()
+//   switch (res.status)
+//   {
+//       case 401 :{        //登录过期
+//           console.log('登录过期')
+//           break;
+//       }
+//       default:
+//           console.log('服务器存在异常', 'middle')
+//           break;
+//   }
+// }
 
 function apiAxios(method, url, params, response) {
   http({
