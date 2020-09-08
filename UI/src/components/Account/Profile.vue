@@ -123,7 +123,7 @@ export default {
     },
     getbaseinfo() {
       this.user = this.$store.state.userinfo;
-      this.$axios.get('/api/SystemUser/' + this.user.pkid, {}, res => {
+      this.$axios.get('/api/SystemUser/' + this.user.PKID, {}, res => {
         if (res.data.code == 1) {
           this.form = res.data.data
         } else {
@@ -138,10 +138,10 @@ export default {
             if (res.data.code == 1) {
               this.$message.success(res.data.msg);
               var user = this.$store.state.userinfo;
-              user.userName = this.form.userName;
-              user.mobilePhone = this.form.mobilePhone;
-              user.headerImgUrl = this.form.headerImgUrl;
-              window.sessionStorage.setItem("userinfo", JSON.stringify(user));
+              user.UserName = this.form.userName;
+              user.MobilePhone = this.form.mobilePhone;
+              user.HeaderImgUrl = this.form.headerImgUrl;
+              this.$cookie.set('userinfo', user);
             } else {
               this.$message.error(res.data.msg);
             }
@@ -150,7 +150,7 @@ export default {
       });
     },
     submit_pwd() {
-      this.pwdModel.pkid = this.user.pkid
+      this.pwdModel.pkid = this.user.PKID
       this.$refs.pwdform.validate((valid) => {
         if (valid) {
           this.$axios.post('/api/Systemuser/ModifyPassword', this.pwdModel, res => {

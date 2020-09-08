@@ -5,7 +5,7 @@
     <i class="el-icon-s-unfold closeicon" v-if="!isopen" @click="tooglemenu"></i>
     <div style="flex:1"></div>
     <div style="flex:0 0 100px" class="vertical-middle">
-      <el-avatar :size="40" :src="Global.baseurl+(userinfo.headerImgUrl==null?Global.defaultheader:userinfo.headerImgUrl)"></el-avatar>
+      <el-avatar :size="40" :src="Global.baseurl+(userinfo.HeaderImgUrl==null?Global.defaultheader:userinfo.HeaderImgUrl)"></el-avatar>
       <i class="el-icon-caret-bottom" id="toggleAvatar" style="margin-left:8px" @click="toggleAvatar"></i>
     </div>
   </el-header>
@@ -129,7 +129,9 @@ export default {
       }
     },
     signout() {
+      // console.log('删除' + this.$cookie.get('userinfo'))
       window.sessionStorage.clear();
+      this.$cookie.set('userinfo', null)
       this.$router.push({
         path: '/login'
       });

@@ -7,8 +7,11 @@
     </div>
     <el-menu :default-active="activeIndex" class="el-menu-vertical-demo" :collapse="!isopen" :collapse-transition="false">
       <el-menu-item index="0">
-        <i class="el-icon-s-home"></i>
-        <span slot="title">首页</span>
+        <router-link to="/">
+          <i class="el-icon-s-home"></i>
+          <span>首页</span>
+        </router-link>
+
       </el-menu-item>
       <el-submenu :index="item.label" v-for="(item,index) in usermenu" :key="index">
         <template slot="title">

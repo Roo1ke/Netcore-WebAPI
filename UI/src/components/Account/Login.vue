@@ -43,15 +43,13 @@ export default {
               var userinfo = res.data.data;
               //登录成功
               const decode = jwtDecode(userinfo);
-              console.log(decode);
-              return;
-              this.$store.state.userinfo = userinfo;
-              window.sessionStorage.setItem("userinfo", JSON.stringify(userinfo));
+              this.$cookie.set('userinfo', decode.userinfo);
+              this.$cookie.set('token', userinfo);
               this.$router.replace({
                 path: '/'
               })
             } else {
-              this.$message.error(res.data.msg);
+              8
             }
             // if (successResponse.data.code === 200) {
 
