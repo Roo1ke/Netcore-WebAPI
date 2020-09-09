@@ -45,6 +45,7 @@ export default {
     activeIndex: {
       get() {
         return this.$store.state.activeIndex;
+
       },
       set(val) {
         this.$store.commit('set_active_index', val);

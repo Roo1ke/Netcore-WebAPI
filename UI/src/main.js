@@ -13,6 +13,24 @@ Vue.prototype.$axios = axios;
 Vue.prototype.$cookie = jsCookie;
 Vue.prototype.Global = Global;
 Vue.config.productionTip = false
+Vue.prototype.validPermission = function (route,operation){
+  var rs=false;
+  var list = store.state.userinfo.permission.filter(e=>e.Path!=null&&e.Path.toUpperCase()==route.toUpperCase())
+  if(list.length>0)
+  {
+    for(var i=0;i<list.length;i++)
+    {
+      if(list[i].operation.filter(e=>e.OperationName==operation).length>0)
+      {
+        rs=true;
+        break;
+      }
+
+    }
+   
+  }
+  return rs;
+}
 Vue.use(ElementUI);
 
 router.beforeEach((to, from, next) => {

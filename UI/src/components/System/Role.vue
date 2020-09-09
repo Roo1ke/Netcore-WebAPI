@@ -54,7 +54,7 @@
     <el-tree :data="menuList" ref="tree" :check-on-click-node="1==1" show-checkbox node-key="id" :default-checked-keys="checkedKeys" default-expand-all>
     </el-tree>
     <div slot="footer" class="dialog-footer">
-      <el-button>关 闭</el-button>
+      <el-button @click="showMenuSetting=false">关 闭</el-button>
       <el-button type="primary" @click="submitMenusetting">提 交</el-button>
     </div>
   </el-dialog>
@@ -144,7 +144,9 @@ export default {
     permission(item) {
       this.currItem = item;
       if (this.currItem.permissionIDS != null) {
-        this.checkedKeys = this.currItem.permissionIDS.split(',').map(Number);
+        this.checkedKeys = this.currItem.permissionIDS.split(',');
+      } else {
+        this.checkedKeys = [];
       }
       this.$axios.get('/api/SysMenu/InitTree', {}, res => {
         this.menuList = res.data;

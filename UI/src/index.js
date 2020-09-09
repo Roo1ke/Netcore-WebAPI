@@ -38,7 +38,6 @@ const checkStatus = (res) => {
       message: '服务器出现未知错误，请稍后再试',
       type: 'error'
     })
-
     return false;
   }
   switch (res.status)
@@ -52,6 +51,17 @@ const checkStatus = (res) => {
           callback: action => {
             jsCookie.set('userinfo', null)
             Router.push({path: '/Login'})
+          }
+        })
+          break;
+      }
+      case 403 :{        
+        ui.MessageBox({
+          title:'系统提示',
+          message: '您的权限不足，无法进行此操作',
+          type: 'warning',
+          confirmButtonText: '确定',
+          callback: action => {
           }
         })
           break;

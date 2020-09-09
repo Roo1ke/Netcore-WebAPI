@@ -1,7 +1,7 @@
 <template>
 <div>
   <el-form :inline="true" class="demo-form-inline">
-    <el-form-item label="关键字">
+    <el-form-item label="关键字" v-if="validPermission($route.path,'查询')">
       <el-input v-model="keywords" placeholder="输入关键字查询"></el-input>
     </el-form-item>
     <!-- <el-form-item label="活动区域">
@@ -10,10 +10,10 @@
         <el-option label="区域二" value="beijing"></el-option>
       </el-select>
     </el-form-item> -->
-    <el-form-item>
+    <el-form-item v-if="validPermission($route.path,'查询')">
       <el-button type="primary" @click="search">查询</el-button>
     </el-form-item>
-    <el-form-item>
+    <el-form-item v-if="validPermission($route.path,'新增&修改')">
       <el-button type="success" @click="add">新增用户</el-button>
     </el-form-item>
   </el-form>
@@ -25,10 +25,10 @@
       </el-table-column>
       <el-table-column prop="mobilePhone" label="电话号码">
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" v-if="validPermission($route.path,'删除')||validPermission($route.path,'新增&修改')">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" size="mini" @click="editevent(scope.row)">编辑</el-button>
-          <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteevent(scope.row)">删除</el-button>
+          <el-button type="primary" icon="el-icon-edit" size="mini" @click="editevent(scope.row)" v-if="validPermission($route.path,'新增&修改')">编辑</el-button>
+          <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteevent(scope.row)" v-if="validPermission($route.path,'删除')">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -182,10 +182,11 @@ export default {
     submit() {
       this.$refs.dengmiQueryForm.validate((valid) => {
         if (valid) {
-          if (this.form.roles.length > 0) {
-            this.form.roles = this.form.roles.join(',')
+          var obj = JSON.parse(JSON.stringify(this.form));
+          if (obj.roles.length > 0) {
+            obj.roles = obj.roles.join(',')
           }
-          this.$axios.post("/api/SystemUser", this.form, res => {
+          this.$axios.post("/api/SystemUser", obj, res => {
             if (res.data.code == 1) {
               this.$message.success(res.data.msg);
               this.dialogFormVisible = false;
