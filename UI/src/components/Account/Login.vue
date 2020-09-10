@@ -45,11 +45,19 @@ export default {
               const decode = jwtDecode(userinfo);
               this.$cookie.set('userinfo', decode.userinfo);
               this.$cookie.set('token', userinfo);
-              this.$router.replace({
-                path: '/'
-              })
+              var path = this.$cookie.get('currpath')
+              if (path == undefined || path == null) {
+                this.$router.replace({
+                  path: '/'
+                })
+              } else {
+                this.$cookie.remove('currpath')
+                this.$router.replace({
+                  path: path
+                })
+              }
             } else {
-              8
+              this.$message.error(res.data.msg);
             }
             // if (successResponse.data.code === 200) {
 

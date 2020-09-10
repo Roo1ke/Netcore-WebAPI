@@ -50,6 +50,7 @@ const checkStatus = (res) => {
           confirmButtonText: '去登陆',
           callback: action => {
             jsCookie.set('userinfo', null)
+            jsCookie.set('currpath',Router.history.current.path)
             Router.push({path: '/Login'})
           }
         })

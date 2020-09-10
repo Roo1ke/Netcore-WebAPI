@@ -5,13 +5,13 @@
     <el-col :span="24">
       <el-card class="box-card">
         <el-form :inline="true" class="demo-form-inline">
-          <el-form-item label="关键字">
+          <el-form-item label="关键字" v-if="validPermission($route.path,'查询')">
             <el-input v-model="keywords" placeholder="输入关键字查询"></el-input>
           </el-form-item>
-          <el-form-item>
+          <el-form-item v-if="validPermission($route.path,'查询')">
             <el-button type="primary" @click="search">查询</el-button>
           </el-form-item>
-          <el-form-item>
+          <el-form-item v-if="validPermission($route.path,'新增&修改')">
             <el-button type="success" @click="add">新增菜单</el-button>
           </el-form-item>
         </el-form>
@@ -25,10 +25,10 @@
             </el-table-column>
             <el-table-column prop="path" label="路径">
             </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="操作" v-if="validPermission($route.path,'删除')||validPermission($route.path,'新增&修改')">
               <template slot-scope="scope">
-                <el-button type="primary" icon="el-icon-edit" size="mini" @click="editevent(scope.row)">编辑</el-button>
-                <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteevent(scope.row)">删除</el-button>
+                <el-button type="primary" icon="el-icon-edit" size="mini" @click="editevent(scope.row)" v-if="validPermission($route.path,'新增&修改')">编辑</el-button>
+                <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteevent(scope.row)" v-if="validPermission($route.path,'删除')">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
