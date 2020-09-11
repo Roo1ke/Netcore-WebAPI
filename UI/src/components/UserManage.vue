@@ -62,6 +62,14 @@
             <el-input v-model="form.mobilePhone" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="24">
+          <el-form-item label="状态">
+            <el-radio-group v-model="form.status">
+              <el-radio :label="1">启用</el-radio>
+              <el-radio :label="0">禁用</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
       </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -155,7 +163,10 @@ export default {
     add() {
       this.dialogFormVisible = true
       this.title = '新增账户'
-      this.form = {}
+      this.form = {
+        status: 1
+
+      }
     },
     //打开编辑弹窗
     editevent(item) {
@@ -173,7 +184,14 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-
+        this.$axios.delete('/api/systemuser/' + item.pkid, {}, res => {
+          if (res.data.code == 1) {
+            this.$message.success(res.data.msg);
+            this.search();
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        })
       }).catch(() => {
 
       });

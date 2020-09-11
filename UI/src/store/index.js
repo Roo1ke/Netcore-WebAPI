@@ -8,7 +8,8 @@ const store = new Vuex.Store({
     state: {
         userinfo: null,
         openTab: [], //所有打开的路由
-        activeIndex: '' //激活状态
+        activeIndex: '', //激活状态
+        showbounce:false//显示过渡动画
     },
     getters: {
         getStorage: function(state) {

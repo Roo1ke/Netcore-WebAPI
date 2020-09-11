@@ -4,7 +4,6 @@
     <SideBar :isopen="isopen"></SideBar>
     <el-container>
       <Header @collapse="collapse"></Header>
-
     </el-container>
   </el-container>
 

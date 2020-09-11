@@ -120,7 +120,14 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-
+        this.$axios.delete('/api/SysRoles/' + item.pkid, {}, res => {
+          if (res.data.code == 1) {
+            this.$message.success(res.data.msg);
+            this.search();
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        })
       }).catch(() => {
 
       });

@@ -1,11 +1,12 @@
 <template>
-<div style="width:100%">
+<div style="width:100%;position:relative">
   <el-header>
     <i class="el-icon-s-fold closeicon" v-if="isopen" @click="tooglemenu"></i>
     <i class="el-icon-s-unfold closeicon" v-if="!isopen" @click="tooglemenu"></i>
     <div style="flex:1"></div>
     <div style="flex:0 0 100px" class="vertical-middle">
       <el-avatar :size="40" :src="Global.baseurl+(userinfo.HeaderImgUrl==null?Global.defaultheader:userinfo.HeaderImgUrl)"></el-avatar>
+      <span>{{$store.state.userinfo.UserName}}</span>
       <i class="el-icon-caret-bottom" id="toggleAvatar" style="margin-left:8px" @click="toggleAvatar"></i>
     </div>
   </el-header>
@@ -30,12 +31,15 @@
     <transition>
       <router-view></router-view>
     </transition>
+    <Transfrom v-if="$store.state.showbounce"></Transfrom>
   </el-main>
 </div>
 </template>
 
 <script>
 import clickoutside from '@/utils/clickoutside'
+import Transfrom from '@/components/Transfrom'
+
 export default {
   name: 'Header',
   data() {
@@ -84,6 +88,7 @@ export default {
     userinfo() {
       return this.$store.state.userinfo;
     },
+
   },
   methods: {
     tooglemenu() {
@@ -162,6 +167,9 @@ export default {
     //   this.$store.commit('set_active_index', '/');
     // }
   },
+  components: {
+    Transfrom: Transfrom
+  }
 }
 </script>
 

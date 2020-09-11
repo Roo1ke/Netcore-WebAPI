@@ -1,8 +1,9 @@
 import axios from 'axios';
 import jsCookie from 'js-cookie'
-import Router from  '@/router/index'
-var ui = require('element-ui')
+import Router from '@/router/index'
+import store from './store/index.js'
 
+var ui = require('element-ui')
 let http = axios.create({
   baseURL: 'https://localhost:44390/',
   withCredentials: true,
@@ -13,63 +14,63 @@ let http = axios.create({
 
 //请求开始拦截
 http.interceptors.request.use(conf => {
- 
+
   //请求带token
-     conf.headers['Authorization'] = 'Bearer '+jsCookie.get('token')
-     //console.log(conf)
-      return conf
-  },
+  conf.headers['Authorization'] = 'Bearer ' + jsCookie.get('token')
+  store.state.showbounce = true;
+  return conf
+},
   error => ({ status: 0, msg: error.message })
 )
 // //请求返回拦截
 http.interceptors.response.use(response => {
-      return Promise.resolve(response)
-  },
+  store.state.showbounce = false;
+  return Promise.resolve(response)
+},
   error => {
-      checkStatus(error.response)
-      return Promise.reject(error)
+    store.state.showbounce = false;
+    checkStatus(error.response)
+    return Promise.reject(error)
   }
 )
 // http状态码错误处理
 const checkStatus = (res) => {
-  if(res==undefined)
-  {
+  if (res == undefined) {
     ui.Message({
       message: '服务器出现未知错误，请稍后再试',
       type: 'error'
     })
     return false;
   }
-  switch (res.status)
-  {
-      case 401 :{        //登录过期
-        ui.MessageBox({
-          title:'系统提示',
-          message: '登录已过期，请重新登录',
-          type: 'error',
-          confirmButtonText: '去登陆',
-          callback: action => {
-            jsCookie.set('userinfo', null)
-            jsCookie.set('currpath',Router.history.current.path)
-            Router.push({path: '/Login'})
-          }
-        })
-          break;
-      }
-      case 403 :{        
-        ui.MessageBox({
-          title:'系统提示',
-          message: '您的权限不足，无法进行此操作',
-          type: 'warning',
-          confirmButtonText: '确定',
-          callback: action => {
-          }
-        })
-          break;
-      }
-      default:
-          console.log('服务器存在异常', 'middle')
-          break;
+  switch (res.status) {
+    case 401: {        //登录过期
+      ui.MessageBox({
+        title: '系统提示',
+        message: '登录已过期，请重新登录',
+        type: 'error',
+        confirmButtonText: '去登陆',
+        callback: action => {
+          jsCookie.set('userinfo', null)
+          jsCookie.set('currpath', Router.history.current.path)
+          Router.push({ path: '/Login' })
+        }
+      })
+      break;
+    }
+    case 403: {
+      ui.MessageBox({
+        title: '系统提示',
+        message: '您的权限不足，无法进行此操作',
+        type: 'warning',
+        confirmButtonText: '确定',
+        callback: action => {
+        }
+      })
+      break;
+    }
+    default:
+      console.log('服务器存在异常', 'middle')
+      break;
   }
 }
 
